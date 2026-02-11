@@ -212,7 +212,7 @@ CUA-system-running-locally-via-sandbox/
 │   └── panels.py                # UI panel widgets
 │
 ├── assets/                      # Demo videos & media
-│   └── (upload your videos here)
+│   
 │
 └── img/                         # Runtime screenshots (auto-generated)
     └── (click previews, screen captures)
