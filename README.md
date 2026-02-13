@@ -9,7 +9,8 @@ A locally-running AI agent that autonomously controls a virtual desktop inside a
 
 ## 🎬 Demo
 
-[Screencast from 11-02-2026 13_58_00.webm](https://github.com/user-attachments/assets/27fa7a7a-f725-428d-a3dc-75ba41ec79de)
+![Gui](./assets/548197364-27fa7a7a-f725-428d-a3dc-75ba41ec79de.gif)
+
 
 
 ## 🎯 What Is This?
