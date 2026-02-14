@@ -21,10 +21,10 @@ class CFG:
     # Repeat guard
     STOP_ON_REPEAT: bool = True
 
-    # Aynı noktaya tıklamayı yakalamak için tolerans
+    # Tolerance for capturing clicks at the same point.
     REPEAT_XY_EPS: float = 0.01     # normalized 0..1
 
-    # VM ekranını pencere olarak aç
+    # Open VM screen as window
     OPEN_VNC_VIEWER: bool = True
     IMAGE_MIN_TOKENS: int = 1024
 
@@ -70,7 +70,7 @@ class CFG:
 
     MAX_STEPS: int = 20
     MODEL_RETRY: int = 2
-    API_READY_TIMEOUT: int = 120  # saniye
+    API_READY_TIMEOUT: int = 120  # seconds
 
     # Sandbox screen size cache (seconds)
     SCREEN_CACHE_TTL: float = 0.5
