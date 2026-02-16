@@ -1,9 +1,8 @@
 <p align="center">
-  <img src="assets/logo/cuaos-logo.png" width="180" alt="CuaOS logo">
+  <img src="assets/CuaOS_logo.png" width="180" alt="CuaOS logo">
 </p>
 
 <h1 align="center">CuaOS</h1>
-<p align="center">Local-first desktop agent sandbox (Docker XFCE + VNC + local VLM)</p>
 
 
 
