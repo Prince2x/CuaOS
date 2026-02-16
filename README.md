@@ -1,9 +1,6 @@
 <p align="center">
-  <img src="assets/CuaOS_logo.png" width="180" alt="CuaOS logo">
+  <img src="assets/CuaOS_logo.png" width="320" alt="CuaOS logo">
 </p>
-
-<h1 align="center">CuaOS</h1>
-
 
 
 # 🖥️ CUA — Computer Use Agent OS(With Local Sandbox)
