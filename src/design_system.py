@@ -1,7 +1,3 @@
-"""
-CUA Mission Control — Design System
-Referans: arayuz.py.py (EyeControl OS mavi teması)
-"""
 from __future__ import annotations
 from dataclasses import dataclass
 
