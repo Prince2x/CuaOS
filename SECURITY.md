@@ -12,7 +12,7 @@
 If you discover a security vulnerability in this project, **please do not open a public issue.** Instead:
 
 1. **Email:** Send a detailed report to the project maintainer via private message or email.
-2. Email: ishakemir454@gmail.com
+   Email: ishakemir454@gmail.com
 3. 
 4. **Include:**
    - Description of the vulnerability
