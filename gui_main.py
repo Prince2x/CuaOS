@@ -30,7 +30,7 @@ tokenizer = MarianTokenizer.from_pretrained(model_name)
 model = MarianMTModel.from_pretrained(model_name)
 
 # ----------------------------
-# Agent core (GUI içinde, main.py'ye ihtiyaç yok)
+# Agent core (runs inside GUI, no need for main.py)
 # ----------------------------
 def trim_history(history: List[Dict[str, Any]], keep_last: int = 6) -> List[Dict[str, Any]]:
     if len(history) <= keep_last:
@@ -46,13 +46,13 @@ def _center_from_bbox(b: List[float]) -> Tuple[float, float]:
 
 def _extract_xy(out: Dict[str, Any]) -> Tuple[float, float]:
     """
-    Model bazen x/y yerine liste döndürebiliyor (ör. bbox).
-    Bu fonksiyon sağlam şekilde float (x,y) üretir.
+    The model sometimes returns a list instead of x/y (e.g. bbox).
+    This function robustly extracts float (x,y) from the response.
     """
     x = out.get("x", 0.5)
     y = out.get("y", 0.5)
 
-    # Bazı modeller "position" ya da bbox benzeri alan döndürebiliyor
+    # Some models may return a "position" or bbox-like field
     pos = out.get("position", None)
     if pos is not None:
         # [[x1,y1],[x2,y2]] veya [x1,y1,x2,y2] veya [x,y]
@@ -65,14 +65,14 @@ def _extract_xy(out: Dict[str, Any]) -> Tuple[float, float]:
                 (x1, y1), (x2, y2) = pos
                 return (float(x1) + float(x2)) / 2.0, (float(y1) + float(y2)) / 2.0
 
-    # x bazen [x,y] veya [x1,y1,x2,y2] gelebiliyor
+    # x may sometimes be [x,y] or [x1,y1,x2,y2]
     if isinstance(x, (list, tuple)):
         if len(x) == 2 and all(isinstance(t, (int, float)) for t in x):
             return float(x[0]), float(x[1])
         if len(x) == 4 and all(isinstance(t, (int, float)) for t in x):
             return _center_from_bbox(list(x))
 
-    # y de bazen list olabilir (nadiren)
+    # y may also be a list (rare)
     if isinstance(y, (list, tuple)):
         if len(y) == 2 and all(isinstance(t, (int, float)) for t in y):
             return float(y[0]), float(y[1])
@@ -90,7 +90,7 @@ def run_single_command(
     stop_event: Optional[threading.Event] = None,
 ) -> str:
     """
-    Terminaldeki main.py davranışının GUI içindeki karşılığı.
+    GUI equivalent of the terminal main.py agent loop.
     """
     def _log(msg: str):
         if log:
@@ -124,12 +124,12 @@ def run_single_command(
                 if ok:
                     out["x"], out["y"] = x, y
                     break
-                _log(f"[WARN] Uygun olmayan koordinat ({reason}), yeniden deneniyor.")
+                _log(f"[WARN] Invalid coordinates ({reason}), retrying.")
                 history.append({"action": "INVALID_COORDS", "raw": out})
                 out = None
                 continue
 
-            # diğer aksiyon türleri (TYPE/PRESS/HOTKEY/SCROLL/WAIT/NOOP) kabul
+            # Other action types (TYPE/PRESS/HOTKEY/SCROLL/WAIT/NOOP) accepted
             break
 
         if out is None:
@@ -156,14 +156,13 @@ def run_single_command(
 
 
 # ----------------------------
-# Qt helpers (bozulma fix)
+# Qt helpers (buffer corruption fix)
 # ----------------------------
 def pil_to_qpixmap(pil_img) -> QPixmap:
     """
-    QImage raw buffer bozulmalarını engellemek için:
-    - stride (bytesPerLine) veriyoruz
-    - qimg.copy() ile detach ediyoruz (buffer ömrü problemi biter)
-    :contentReference[oaicite:1]{index=1}
+    Prevent QImage raw buffer corruption:
+    - provide stride (bytesPerLine)
+    - qimg.copy() to detach (fixes buffer lifetime issues)
     """
     rgb = pil_img.convert("RGB")
     w, h = rgb.size
@@ -175,9 +174,9 @@ def pil_to_qpixmap(pil_img) -> QPixmap:
 
 def scale_crop_to_label(pm: QPixmap, label_w: int, label_h: int) -> QPixmap:
     """
-    Boşluk kalmasın diye:
-    - KeepAspectRatioByExpanding ile doldur
-    - ortadan crop et
+    Fill without gaps:
+    - KeepAspectRatioByExpanding to fill
+    - crop from center
     """
     if label_w <= 0 or label_h <= 0:
         return pm
@@ -195,7 +194,7 @@ def scale_crop_to_label(pm: QPixmap, label_w: int, label_h: int) -> QPixmap:
 
 
 class VMView(QLabel):
-    """VM ekranını letterbox (fit) çizip mouse/klavye inputunu VM'ye aktarır."""
+    """Renders the VM screen with letterbox (fit) scaling and forwards mouse/keyboard input to the VM."""
 
     def __init__(self, sandbox: Sandbox, parent=None):
         super().__init__(parent)
@@ -368,7 +367,7 @@ class AgentWindow(QMainWindow):
         self.sandbox = Sandbox(cfg)
         self.sandbox.start()
 
-        # GUI zaten VM görüntüsünü gösterecek; dış vnc açmak istemiyorsan config’te kapat.
+        # GUI already shows VM screen; disable external VNC viewer in config if unwanted.
         if getattr(cfg, "OPEN_VNC_VIEWER", False):
             self.sandbox.launch_vnc_viewer()
 
@@ -396,7 +395,7 @@ class AgentWindow(QMainWindow):
         vm_layout.setContentsMargins(0, 0, 0, 0)
 
         self.vm_view = VMView(self.sandbox)
-        self.vm_view.setText("VM ekranı yükleniyor...")
+        self.vm_view.setText("Loading VM screen...")
         self.vm_view.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
 
         vm_layout.addWidget(self.vm_view)
@@ -411,9 +410,9 @@ class AgentWindow(QMainWindow):
 
         row = QHBoxLayout()
         self.cmd_input = QLineEdit()
-        self.cmd_input.setPlaceholderText("Komut gir... (örn: Open web browser)")
-        self.run_btn = QPushButton("Çalıştır")
-        self.stop_btn = QPushButton("Durdur")
+        self.cmd_input.setPlaceholderText("Enter command... (e.g. Open web browser)")
+        self.run_btn = QPushButton("Run")
+        self.stop_btn = QPushButton("Stop")
         self.stop_btn.setEnabled(False)
 
         row.addWidget(self.cmd_input, stretch=1)
@@ -424,11 +423,11 @@ class AgentWindow(QMainWindow):
         grid = QGridLayout()
         presets = [
             ("Home", "Click Home file"),
-            ("Terminal Aç", "Open terminal"),
-            ("Browser Aç", "Open web browser"),
+            ("Terminal", "Open terminal"),
+            ("Browser", "Open web browser"),
             ("Wikipedia LLM", 'Click on web browser, then open Wikipedia, search "LLM" and press Enter'),
-            ("Yaz: merhaba dünya", 'text type "merhaba dünya"'),
-            ("Kapat", "bilgisayar kapat"),
+            ("Type: hello world", 'text type "hello world"'),
+            ("Shutdown", "shutdown"),
         ]
         self.preset_buttons: List[QPushButton] = []
         for i, (title, cmd) in enumerate(presets):
@@ -450,13 +449,13 @@ class AgentWindow(QMainWindow):
         self.stop_btn.clicked.connect(self._on_stop)
         self.cmd_input.returnPressed.connect(self._on_run)
 
-        # VM ekranını sürekli güncelle
+        # Continuously refresh VM screen
         self.timer = QTimer(self)
         self.timer.timeout.connect(self._refresh_vm_screenshot)
-        self.timer.start(350)  # full-res olduğu için biraz daha stabil
+        self.timer.start(350)  # stable interval for full-res
 
         self._refresh_vm_screenshot()
-        self._append_log("[GUI] Hazır. Komut girip Çalıştır’a basabilirsin.")
+        self._append_log("[GUI] Ready. Enter a command and click Run.")
 
     def _style_sheet(self) -> str:
         return """
@@ -494,7 +493,7 @@ class AgentWindow(QMainWindow):
         for b in self.preset_buttons:
             b.setEnabled(not busy)
 
-        # komut çalışırken screenshot refresh’i biraz yavaşlat (API’yı boğmasın)
+        # Slow down screenshot refresh while command is running (avoid API overload)
         self.timer.setInterval(650 if busy else 350)
         try:
             self.vm_view.input_enabled = (not busy)
@@ -510,7 +509,7 @@ class AgentWindow(QMainWindow):
     def _on_stop(self):
         if self.stop_event:
             self.stop_event.set()
-            self._append_log("[GUI] Stop sinyali gönderildi.")
+            self._append_log("[GUI] Stop signal sent.")
 
     def _on_run(self):
         objective = self.cmd_input.text().strip()
@@ -519,24 +518,24 @@ class AgentWindow(QMainWindow):
             print( tokenizer.decode(t, skip_special_tokens=True) )
 
         objective=tokenizer.decode(t, skip_special_tokens=True)
-        print(f"kullancı sorusu tam bu: {objective}")
+        print(f"User question translated: {objective}")
         if not objective:
-            self._append_log("[GUI] Komut boş olamaz.")
+            self._append_log("[GUI] Command cannot be empty.")
             return
 
         low = objective.lower().strip()
-        if low in ("bilgisayar kapat", "exit", "quit", "çık", "çıkış"):
-            self._append_log("[GUI] Kapatılıyor...")
+        if low in ("shutdown", "exit", "quit"):
+            self._append_log("[GUI] Shutting down...")
             QApplication.quit()
             return
 
         if self.worker_thread and self.worker_thread.is_alive():
-            self._append_log("[GUI] Zaten bir komut çalışıyor.")
+            self._append_log("[GUI] A command is already running.")
             return
 
         self.stop_event = threading.Event()
         self.signals.busy.emit(True)
-        self._append_log(f"[GUI] Komut başladı: {objective}")
+        self._append_log(f"[GUI] Command started: {objective}")
 
         def worker():
             try:
@@ -547,9 +546,9 @@ class AgentWindow(QMainWindow):
                     log=lambda s: self.signals.log.emit(s),
                     stop_event=self.stop_event,
                 )
-                self.signals.finished.emit(f"[GUI] Komut sonucu: {res}")
+                self.signals.finished.emit(f"[GUI] Command result: {res}")
             except Exception:
-                self.signals.log.emit("[GUI] HATA:\n" + traceback.format_exc())
+                self.signals.log.emit("[GUI] ERROR:\n" + traceback.format_exc())
             finally:
                 self.signals.busy.emit(False)
 
@@ -562,7 +561,7 @@ class AgentWindow(QMainWindow):
             pm = pil_to_qpixmap(img)
             self.vm_view.set_frame(pm)
         except Exception:
-            # log spam olmasın diye sus
+            # Suppress log spam on refresh errors
             pass
 
 
